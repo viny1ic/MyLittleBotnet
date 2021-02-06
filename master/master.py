@@ -1,6 +1,5 @@
 import socket
 from threading import Thread
-import time
 
 initial_port = 7777
 max_bots = 5
@@ -15,11 +14,6 @@ def listen(port):
     slave, slave_address = s.accept()
     slaves.append(slave)
 
-def getSlaveMsg(s):
-    while True:
-        msg=s.recv(1024).decode()
-        print("[+] Slave said: ", msg)
-
 def main():
     print("[+] Master bot listening for incoming connections")
     for i in range(max_bots):
@@ -32,23 +26,23 @@ def main():
             print("[+] Enumerating all slaves.")
             for index, individual_slave in enumerate(slaves):
                 print("[i] ", index, ". slave ip: ", individual_slave.getpeername())
-                try:
-                    Thread(target=getSlaveMsg,args=(individual_slave,),daemon=True).start()
-                except:
-                    print("[E] Error starting msg reciever thread for master")
             while True:
-                msg = input("[+] enter message: ")
-                for slave in slaves:
-                    slave.send(msg.encode())
-                if msg == "exit":
+                slave = int(input("enter the index of the slave you want to communicate with. enter -1 to exit: "))
+                if slave == -1:
                     break
-            if msg == "exit":
+                while True:
+                    msg = input("[+] enter message: ")
+                    slaves[slave].send(msg.encode())
+                    if msg == "exit":
+                        break
+                
+            if slave==-1:
                 break
 
 
 if __name__=="__main__":
-    try:
-        main()
-    except:
-        print("Exiting")
-        exit
+    # try:
+    main()
+    # except:
+    #     print("Exiting")
+    #     exit
